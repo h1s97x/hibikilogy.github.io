@@ -63,13 +63,7 @@ kramdown:
 
 # Gitalk
 gitalk:
-  enable: true    #是否开启Gitalk评论
-  clientID: 6dc3ca1058cac3fde9ab                            #生成的clientID
-  clientSecret: 7b778acea4a91f5f97d82d46dc91f8d12fcad52e     #生成的clientSecret
-  repo: hibikilogy.github.io    #仓库名称
-  owner: hibikilogy     #github用户名
-  admin: "['inchei','97littleleaf11']"
-  distractionFreeMode: true #是否启用类似FB的阴影遮罩
+  enable: false   # 已关闭，保留 Giscus
 
 # Giscus (https://giscus.app/)
 giscus:
