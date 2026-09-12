@@ -186,7 +186,9 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright [yyyy] [name of copyright owner]
+   Copyright 2020-2026 京吹学报
+
+       https://github.com/hibikilogy/hibikilogy.github.io
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -199,3 +201,11 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+-------------------------------------------------------------------------
+
+Except for the third-party components listed in the NOTICE file, this
+project is licensed under the Apache License, Version 2.0. This license
+applies only to this project's source code, themes, scripts and
+configuration files; it does not apply to the articles published on this
+site.
