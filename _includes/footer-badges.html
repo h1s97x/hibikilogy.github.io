@@ -1,13 +1,15 @@
 {% comment %}
 站点页脚徽章行（样式参考 MOBIUS.BLOG 页脚）
   - 人工撰写文章 / 非文章页 → /承诺非AI创作（Not By AI 官方徽章）
-  - 标注 ai-generated: true 的文章 → /本文由AI生成（灰色 AI 标识）
+  - 标注 ai-generated: true 的文章 → /含AI生成内容（灰色 AI 标识）
   - 文章 front matter 声明 license 字段 → /内容使用许可（可选，默认不启用）
 
 开关（_config.yml）：
   - footer-badges.enable          页脚徽章行总开关
   - notbyai.enable                是否显示 /承诺非AI创作
-  - footer-badges.ai-badge-file   /本文由AI生成 的标识图路径
+  - footer-badges.ai-badge-file   /含AI生成内容 的标识图路径
+  - footer-badges.ai-badge-text   /含AI生成内容 的文案
+  - footer-badges.ai-badge-title  悬停提示文案
   - footer-badges.licenses        内容使用许可预设；仅当文章 front matter 的
                                   license 字段取值为某预设键名时才展示对应徽章。
                                   文章著作权归原作者所有，网站不代作者授予许可。
@@ -18,9 +20,9 @@
 {% if site.footer-badges.enable %}
 <div class="footer-badges">
     {% if page.ai-generated %}
-    <div class="footer-badge footer-badge--ai" title="本文由 AI 生成">
-        <img src="{{ site.footer-badges.ai-badge-file | prepend: site.baseurl }}" alt="AI generated" width="130" height="28">
-        <span>/本文由AI生成</span>
+    <div class="footer-badge footer-badge--ai" title="{{ site.footer-badges.ai-badge-title }}">
+        <img src="{{ site.footer-badges.ai-badge-file | prepend: site.baseurl }}" alt="{{ site.footer-badges.ai-badge-title }}" width="130" height="28">
+        <span>/{{ site.footer-badges.ai-badge-text }}</span>
     </div>
     {% elsif site.notbyai.enable %}
     <a class="footer-badge" href="https://notbyai.fyi" target="_blank" rel="noopener noreferrer" title="承诺非 AI 创作">

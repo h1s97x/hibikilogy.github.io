@@ -57,7 +57,7 @@ tags:
 
 更多请查询 [markdown 语法](https://www.runoob.com/markdown/md-tutorial.html)。
 
-> `ai-generated` 字段用于标注文章是否由 AI 生成：未标注或为 `false` 时视为人工撰写，文章底部会展示 Not By AI 徽章；如为 AI 生成请改为 `true`。
+> `ai-generated` 字段用于标注文章是否含 AI 生成内容：未标注或为 `false` 时视为人工撰写，文章底部会展示 Not By AI 徽章；如文章含 AI 生成内容（哪怕只有部分章节）请改为 `true`，页脚将展示「含AI生成内容」标识。
 >
 > `license` 字段（可选）用于声明文章的内容使用许可，默认不启用。文章著作权归原作者所有，除非另有声明，所有权利保留；网站不会代表作者授予任何许可。如作者希望以特定许可协议授权他人使用，可填写预设键名（如 `license: cc-by-nc-sa` 表示 CC BY-NC-SA 4.0），文章页脚将展示对应许可徽章。
 
