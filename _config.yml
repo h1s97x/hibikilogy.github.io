@@ -98,11 +98,15 @@ notbyai:
 footer-badges:
   enable: true
   ai-badge-file: /images/badges/ai-generated.svg
-  license:
-    enable: true
-    name: CC BY-NC-SA 4.0
-    url: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh
-    file: /images/licenses/cc-by-nc-sa.svg
+  # 内容使用许可：可选，默认不启用。
+  # 文章著作权归原作者所有，除非另有声明，所有权利保留；网站不会代表作者授予任何许可。
+  # 仅当文章 front matter 声明 license 字段（取值为下方预设的键名）时，页脚才展示对应许可徽章，
+  # 例如在文章 front matter 中写 `license: cc-by-nc-sa`。
+  licenses:
+    cc-by-nc-sa:
+      name: CC BY-NC-SA 4.0
+      url: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh
+      file: /images/licenses/cc-by-nc-sa.svg
 
 
 # 统计

@@ -2,13 +2,15 @@
 站点页脚徽章行（样式参考 MOBIUS.BLOG 页脚）
   - 人工撰写文章 / 非文章页 → /承诺非AI创作（Not By AI 官方徽章）
   - 标注 ai-generated: true 的文章 → /本文由AI生成（灰色 AI 标识）
-  - 所有页面 → /内容使用许可（CC BY-NC-SA 4.0）
+  - 文章 front matter 声明 license 字段 → /内容使用许可（可选，默认不启用）
 
 开关（_config.yml）：
   - footer-badges.enable          页脚徽章行总开关
   - notbyai.enable                是否显示 /承诺非AI创作
   - footer-badges.ai-badge-file   /本文由AI生成 的标识图路径
-  - footer-badges.license.enable  是否显示 /内容使用许可
+  - footer-badges.licenses        内容使用许可预设；仅当文章 front matter 的
+                                  license 字段取值为某预设键名时才展示对应徽章。
+                                  文章著作权归原作者所有，网站不代作者授予许可。
 
 注意：Not By AI 官方徽章为“黑底 + 镂空文字”（文字透出页面背景色），
 深色模式下需给徽章加白色底衬，否则文字不可读；灰色 AI 标识自带底色，无需底衬。
@@ -26,9 +28,10 @@
         <span>/承诺非AI创作</span>
     </a>
     {% endif %}
-    {% if site.footer-badges.license.enable %}
-    <a class="footer-badge" href="{{ site.footer-badges.license.url }}" target="_blank" rel="noopener noreferrer" title="{{ site.footer-badges.license.name }}">
-        <img src="{{ site.footer-badges.license.file | prepend: site.baseurl }}" alt="{{ site.footer-badges.license.name }}" width="88" height="31">
+    {% assign footer_license = site.footer-badges.licenses[page.license] %}
+    {% if footer_license %}
+    <a class="footer-badge" href="{{ footer_license.url }}" target="_blank" rel="noopener noreferrer" title="{{ footer_license.name }}">
+        <img src="{{ footer_license.file | prepend: site.baseurl }}" alt="{{ footer_license.name }}" width="88" height="31">
         <span>/内容使用许可</span>
     </a>
     {% endif %}
