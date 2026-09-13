@@ -19,7 +19,7 @@ tags:
 
 &emsp;&emsp;**内含剧透慎点！！！**
 
-![]({{ site.url }}{{ site.baseurl }}/images/2023-12-22/QllKUSttUlFSajBMeHVSag==.w659.h370.webp)
+![]({{ site.baseurl }}/images/2023-12-22/QllKUSttUlFSajBMeHVSag==.w659.h370.webp)
 
 &emsp;&emsp;……
 

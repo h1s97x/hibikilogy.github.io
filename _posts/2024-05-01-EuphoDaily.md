@@ -22,7 +22,7 @@ tags:
 
 &emsp;&emsp;加藤叶月、剑崎梨梨花等参加调研。
 
-![]({{ site.url }}{{ site.baseurl }}/images/2024-05-01/QlhFVl9yfm5zcU5zUmtNfQ==.w1256.h670.jpg)
+![]({{ site.baseurl }}/images/2024-05-01/QlhFVl9yfm5zcU5zUmtNfQ==.w1256.h670.jpg)
 <center><small>许波多神社（示意图）</small></center>
 
 # 『ユーフォ日報』 4月22日一面ニュース：黄前久美子さんが黄檗を訪問
