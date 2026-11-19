@@ -32,6 +32,8 @@ author: 作者
 original: 原文地址
 header-img: 顶部图片，可空缺
 catalog: true
+ai-generated: false
+# license: cc-by-nc-sa
 tags:
     - 发布论坛（如 Stage1、NGA、虎扑、贴吧）
 ---
@@ -54,6 +56,10 @@ tags:
 ```
 
 更多请查询 [markdown 语法](https://www.runoob.com/markdown/md-tutorial.html)。
+
+> `ai-generated` 字段用于标注文章的 AI 生成情况：未标注或为 `false` 时视为人工撰写，文章底部展示 Not By AI 徽章；`partial` 表示仅部分内容由 AI 生成，页脚展示蓝色「含AI生成内容」标识；`true` 表示全篇或主体由 AI 生成，页脚展示紫色「全文由AI生成」标识。
+>
+> `license` 字段（可选）用于声明文章的内容使用许可，默认不启用。文章著作权归原作者所有，除非另有声明，所有权利保留；网站不会代表作者授予任何许可。如作者希望以特定许可协议授权他人使用，可填写预设键名（如 `license: cc-by-nc-sa` 表示 CC BY-NC-SA 4.0），文章页脚将展示对应许可徽章。
 
 添加完成后，再回到本网站仓库的界面，[提交 Pull Request](https://github.com/hibikilogy/hibikilogy.github.io/compare)。
 
@@ -99,6 +105,12 @@ lessc ./less/hux-blog.less ./css/hux-blog.css & lessc --clean-css ./less/hux-blo
 如果需要进行长期的贡献<del>或者想要在 GitHub 用户界面添加一个组织</del>，请在[网站仓库的 issues](https://github.com/hibikilogy/hibikilogy.github.io/issues) 里添加加入申请。
 
 本组织持有者目前学业繁忙，欢迎有意接替者。
+
+## 授权
+
+* **源代码与主题**：本项目（除第三方组件外）基于 [Apache License 2.0](LICENSE) 协议开源，该许可仅适用于本项目的源代码、主题、脚本和配置文件。
+* **站内文章**：本站收录的文章等内容不属于上述许可的适用范围，著作权归各篇文章的作者所有；如需使用，请与作者或《京吹学报》编辑部联系（投稿事项见[《我要投稿》](https://hibikilogy.github.io/contribute)）。
+* **第三方组件**：本站使用的 [Hux Blog](https://github.com/Huxpro/huxpro.github.io) 主题（Copyright 2015-2016 Huxpro，Apache License 2.0）及其子组件 Clean Blog Jekyll Theme（Copyright (c) 2013-2016 Blackrock Digital LLC.，MIT License）版权归原作者所有，详见 [NOTICE](NOTICE)。
 
 ## 其他
 吹学论文收集可能具有一定统计学意义，在 `_posts/wordcloud.zip` 中有关于词云生成的文件，有兴趣者可以尝试。
