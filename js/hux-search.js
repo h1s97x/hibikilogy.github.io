@@ -40,20 +40,21 @@
         index = lunr(function () {
           this.ref('url');
 
+          // 中文分词：用 this.use(lunr.zh) 一次性搞定
+          // 它会自动：
+          //   1. pipeline.reset() 清掉默认 English stopWordFilter / stemmer
+          //   2. pipeline.add 中文 trimmer / stopWordFilter / stemmer
+          //   3. this.tokenizer = lunr.zh.tokenizer — 基于 Intl.Segmenter 做真正的中文分词
+          if (window.lunr && window.lunr.zh) {
+            this.use(lunr.zh);
+          }
+
           // 权重：标题最高，摘要其次，标签和作者较低
           this.field('title', { boost: 10 });
           this.field('subtitle', { boost: 5 });
           this.field('tags', { boost: 3 });
           this.field('author', { boost: 2 });
           this.field('excerpt', { boost: 1 });
-
-          // 中文分词 pipeline
-          if (window.lunr && window.lunr.zh) {
-            this.pipeline.add(lunr.zh.trimmer);
-            this.pipeline.add(lunr.zh.stopWordFilter);
-            this.pipeline.add(lunr.zh.stemmer);
-            this.searchPipeline.add(lunr.zh.stemmer);
-          }
 
           data.forEach((doc) => {
             // 标签数组 → 空格分隔字符串，方便分词
@@ -108,14 +109,24 @@
     let results;
 
     try {
-      // 多策略：先精确匹配，失败再 wildcard
-      results = index.search(q);
+      // Lunr 2.3.9 的 QueryParser 不会用 tokenizer 分割 query term，
+      // 它只按空格等语法分 clause。所以必须先对 query 手动做中文分词，
+      // 再用空格拼回去交给 Lunr 搜索。
+      // 否则用户输入 "黄前" 会被当成一个 term 直接查 invertedIndex，
+      // 但构建时 tokenizer 把它拆成了 [黄, 前]，自然查不到。
+      let searchQuery = q;
+      if (window.lunr && window.lunr.zh && typeof lunr.zh.tokenizer === 'function') {
+        const tokens = lunr.zh.tokenizer(q);
+        searchQuery = tokens.map((t) => t.toString()).join(' ');
+      }
+
+      results = index.search(searchQuery);
 
       // 如果结果太少，尝试 wildcard 匹配每个词
       if (results.length < 3) {
-        const tokens = q.split(/\s+/).filter(Boolean);
+        const tokens = searchQuery.split(/\s+/).filter(Boolean);
         const wildcardQuery = tokens.map((t) => '*' + t + '*').join(' ');
-        if (wildcardQuery !== q) {
+        if (wildcardQuery !== searchQuery) {
           const more = index.search(wildcardQuery);
           // 合并去重
           const seen = new Set(results.map((r) => r.ref));
