@@ -11,7 +11,7 @@
   'use strict';
 
   const SEARCH_INDEX_URL = '/search.json';
-  const MAX_RESULTS = 50;
+  const MAX_RESULTS = 20;
 
   let index = null;
   let store = [];
@@ -144,23 +144,20 @@
     }
 
     const total = results.length;
-    const limited = results.slice(0, MAX_RESULTS).map((r) => {
+    const items = results.map((r) => {
       const doc = findDocByUrl(r.ref);
       if (!doc) return null;
-      return {
-        score: r.score,
-        doc: doc,
-      };
+      return { score: r.score, doc: doc };
     }).filter(Boolean);
 
-    return { total: total, items: limited };
+    return { total: total, items: items };
   }
 
   /**
    * 渲染搜索结果到容器
    */
-  function renderResults(containerEl, items, total, query) {
-    if (!items || items.length === 0) {
+  function renderResults(containerEl, allItems, total, currentPage, query) {
+    if (!allItems || allItems.length === 0) {
       if (query && query.trim().length > 0) {
         containerEl.innerHTML =
           '<div class="search-empty">没有找到与 "<strong>' +
@@ -173,7 +170,12 @@
       return;
     }
 
-    const html = items
+    const totalPages = Math.max(1, Math.ceil(allItems.length / MAX_RESULTS));
+    const page = Math.min(currentPage, totalPages);
+    const startIdx = (page - 1) * MAX_RESULTS;
+    const pageItems = allItems.slice(startIdx, startIdx + MAX_RESULTS);
+
+    const html = pageItems
       .map((r, idx) => {
         const doc = r.doc;
         const tags = (doc.tags || [])
@@ -207,13 +209,21 @@
       })
       .join('');
 
-    const truncated = total > items.length;
+    let paginationHtml = '';
+    if (totalPages > 1) {
+      paginationHtml = '<div class="search-pagination">';
+      paginationHtml += '<button type="button" class="search-page-btn" data-page="' + (page - 1) + '"' + (page === 1 ? ' disabled' : '') + '>‹</button>';
+      const startPage = Math.max(1, page - 2);
+      const endPage = Math.min(totalPages, page + 2);
+      for (let p = startPage; p <= endPage; p++) {
+        paginationHtml += '<button type="button" class="search-page-btn' + (p === page ? ' active' : '') + '" data-page="' + p + '">' + p + '</button>';
+      }
+      paginationHtml += '<button type="button" class="search-page-btn" data-page="' + (page + 1) + '"' + (page === totalPages ? ' disabled' : '') + '>›</button>';
+      paginationHtml += '</div>';
+    }
+
     containerEl.innerHTML =
-      '<div class="search-result-count">找到 ' +
-      total +
-      ' 条结果' +
-      (truncated ? '（显示前 ' + items.length + ' 条）' : '') +
-      '</div>' + html;
+      '<div class="search-result-count">找到 ' + total + ' 条结果（第 ' + page + '/' + totalPages + ' 页）</div>' + html + paginationHtml;
   }
 
   function escapeHtml(str) {
@@ -228,6 +238,7 @@
   let inputEl = null;
   let resultsEl = null;
   let currentActiveIdx = -1;
+  let currentPage = 1;
 
   function createModal() {
     if (modalEl) return modalEl;
@@ -256,7 +267,7 @@
     modalEl.querySelector('.search-modal-clear').addEventListener('click', () => {
       inputEl.value = '';
       inputEl.focus();
-      renderResults(resultsEl, [], 0, '');
+      renderResults(resultsEl, [], 0, 1, '');
     });
 
     // 事件：输入搜索
@@ -268,15 +279,25 @@
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         const res = doSearch(q);
-        renderResults(resultsEl, res.items, res.total, q);
+        currentPage = 1;
+        renderResults(resultsEl, res.items, res.total, currentPage, q);
       }, 150);
     });
 
     // 事件：键盘导航
     inputEl.addEventListener('keydown', onKeyDown);
 
-    // 事件：点击结果项 → 跳转
+    // 事件：点击结果项 → 跳转；点击分页按钮 → 翻页
     resultsEl.addEventListener('click', (e) => {
+      const pageBtn = e.target.closest('.search-page-btn');
+      if (pageBtn) {
+        if (pageBtn.disabled) return;
+        currentPage = parseInt(pageBtn.dataset.page, 10);
+        const q = inputEl.value.trim();
+        const res = doSearch(q);
+        renderResults(resultsEl, res.items, res.total, currentPage, q);
+        return;
+      }
       const item = e.target.closest('.search-result-item');
       if (!item) return;
       closeModal();
@@ -333,7 +354,7 @@
         inputEl.value = initialQuery;
         inputEl.dispatchEvent(new Event('input'));
       } else {
-        renderResults(resultsEl, [], 0, '');
+        renderResults(resultsEl, [], 0, 1, '');
       }
     });
   }
