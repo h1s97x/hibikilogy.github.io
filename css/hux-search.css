@@ -169,14 +169,16 @@
 
 .search-result-meta {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 4px 8px;
   font-size: 12px;
   color: #aaa;
 }
 
 .search-result-tags {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   gap: 4px;
 }
 
