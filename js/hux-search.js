@@ -11,7 +11,7 @@
   'use strict';
 
   const SEARCH_INDEX_URL = '/search.json';
-  const MAX_RESULTS = 20;
+  const MAX_RESULTS = 50;
 
   let index = null;
   let store = [];
@@ -103,7 +103,7 @@
   }
 
   function doSearch(query) {
-    if (!index || !query || query.trim().length === 0) return [];
+    if (!index || !query || query.trim().length === 0) return { total: 0, items: [] };
 
     const q = query.trim();
     let results;
@@ -143,7 +143,8 @@
       results = [];
     }
 
-    return results.slice(0, MAX_RESULTS).map((r) => {
+    const total = results.length;
+    const limited = results.slice(0, MAX_RESULTS).map((r) => {
       const doc = findDocByUrl(r.ref);
       if (!doc) return null;
       return {
@@ -151,13 +152,15 @@
         doc: doc,
       };
     }).filter(Boolean);
+
+    return { total: total, items: limited };
   }
 
   /**
    * 渲染搜索结果到容器
    */
-  function renderResults(containerEl, results, query) {
-    if (results.length === 0) {
+  function renderResults(containerEl, items, total, query) {
+    if (!items || items.length === 0) {
       if (query && query.trim().length > 0) {
         containerEl.innerHTML =
           '<div class="search-empty">没有找到与 "<strong>' +
@@ -170,7 +173,7 @@
       return;
     }
 
-    const html = results
+    const html = items
       .map((r, idx) => {
         const doc = r.doc;
         const tags = (doc.tags || [])
@@ -204,8 +207,13 @@
       })
       .join('');
 
+    const truncated = total > items.length;
     containerEl.innerHTML =
-      '<div class="search-result-count">找到 ' + results.length + ' 条结果</div>' + html;
+      '<div class="search-result-count">找到 ' +
+      total +
+      ' 条结果' +
+      (truncated ? '（显示前 ' + items.length + ' 条）' : '') +
+      '</div>' + html;
   }
 
   function escapeHtml(str) {
@@ -248,7 +256,7 @@
     modalEl.querySelector('.search-modal-clear').addEventListener('click', () => {
       inputEl.value = '';
       inputEl.focus();
-      renderResults(resultsEl, [], '');
+      renderResults(resultsEl, [], 0, '');
     });
 
     // 事件：输入搜索
@@ -260,7 +268,7 @@
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         const res = doSearch(q);
-        renderResults(resultsEl, res, q);
+        renderResults(resultsEl, res.items, res.total, q);
       }, 150);
     });
 
@@ -325,7 +333,7 @@
         inputEl.value = initialQuery;
         inputEl.dispatchEvent(new Event('input'));
       } else {
-        renderResults(resultsEl, [], '');
+        renderResults(resultsEl, [], 0, '');
       }
     });
   }
